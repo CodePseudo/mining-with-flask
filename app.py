@@ -5,12 +5,20 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-   return render_template('index.html')
+    g = len(open("./logs.txt",'r').read().split('\n'))
+    return render_template('index.html', source=g)
 
 @app.route('/status')
 def status():
-    pass
+    with open('./logs.txt','a+') as f:
+        runA(f)
+    return render_template('index.html',)
 
+@app.route('/stop')
+def stop():
+    for path in run("kill `pidof -x minergate-cli`"):
+        print(path)
+    return render_template('stop.html')
 
 def run(command):
     process = Popen(command, stdout=PIPE, shell=True)
@@ -20,7 +28,12 @@ def run(command):
             break
         yield line
 
-if __name__ == "__main__":
+def runA(f):
     for path in run("./minergate-cli/minergate-cli -u vinay@programmer.net --xmr 2 -g"):
         print(path)
+        f.write(str(path))
+        f.write('\n')
+
+
+if __name__ == "__main__":
     app.run()
