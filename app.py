@@ -29,7 +29,7 @@ def run(command):
         yield line
 
 def runA(f):
-    for path in run("./minergate-cli/minergate-cli -u vinay@programmer.net --xmr 2"):
+    for path in run("./minergate-cli/minergate-cli -u vinay@programmer.net --xmr 4"):
         print(path)
         f.write(str(path))
         f.write('\n')
